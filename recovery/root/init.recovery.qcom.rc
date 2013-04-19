@@ -1,8 +1,8 @@
 on init
     export LD_LIBRARY_PATH /system/lib
 
-#on boot
-#    insmod /modules/kc_sdcarddrv.ko
+on boot
+    insmod /modules/kc_sdcarddrv.ko
 #    write /sys/kernel/mmc_protect/clear mmcblk0p8
 #    write /sys/kernel/mmc_protect/clear mmcblk0p12
 
