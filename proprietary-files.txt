@@ -1,3 +1,4 @@
+bin/linker
 bin/sdgpiocmd
 bin/rmt_storage
 lib/libcutils.so

@@ -1,9 +1,9 @@
 #!/bin/sh
 
-VENDOR=kyocera
-DEVICE=isw12k
+RECOVERY_ROOT=recovery/root
+BASE=$RECOVERY_ROOT/system
 
-BASE=../../../vendor/$VENDOR/$DEVICE/proprietary
+mkdir -p $BASE
 
 echo "Pulling device files..."
 for FILE in `cat proprietary-files.txt | grep -v ^# | grep -v ^$`; do
@@ -13,5 +13,3 @@ for FILE in `cat proprietary-files.txt | grep -v ^# | grep -v ^$`; do
     fi
     adb pull /system/$FILE $BASE/$FILE
 done
-
-./setup-makefiles.sh
