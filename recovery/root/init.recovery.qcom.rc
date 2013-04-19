@@ -1,0 +1,14 @@
+on init
+    export LD_LIBRARY_PATH /system/lib
+
+#on boot
+#    insmod /modules/kc_sdcarddrv.ko
+#    write /sys/kernel/mmc_protect/clear mmcblk0p8
+#    write /sys/kernel/mmc_protect/clear mmcblk0p12
+
+service rmt_storage /sbin/rmt_storage
+    user root
+    disabled
+
+on property:ro.emmc=1
+    start rmt_storage
