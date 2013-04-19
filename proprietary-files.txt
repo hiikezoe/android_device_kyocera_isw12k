@@ -1,0 +1,8 @@
+bin/sdgpiocmd
+bin/rmt_storage
+lib/libcutils.so
+lib/libstdc++.so
+lib/liblog.so
+lib/libm.so
+lib/libc.so
+lib/modules/kc_sdcarddrv.ko
