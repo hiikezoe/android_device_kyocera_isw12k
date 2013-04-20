@@ -4,7 +4,7 @@
 
 ### Recovery Mode
 
-    Volume up + Power on
+
 
 ## Partition
 
