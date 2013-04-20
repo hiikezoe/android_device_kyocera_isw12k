@@ -6,6 +6,10 @@
 
     Menu + Volume up + Volume down + Power on
 
+### 0482:056d
+
+    Connect USB cable without battery
+
 ## Partition
 
     mmcblk0p1  AMMS
