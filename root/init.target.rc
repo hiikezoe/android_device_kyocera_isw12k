@@ -1,0 +1,287 @@
+# This software is contributed or developed by KYOCERA Corporation.
+# (C) 2012 KYOCERA Corporation
+#
+
+# Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of Code Aurora Forum, Inc. nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+on boot
+
+    # Disable idle power collapse during boot.
+    # These features will be enabled at the end of boot
+    write /sys/module/pm2/parameters/idle_sleep_mode 3
+
+    # Disable keypad (except Power key) during "suspend2ram" state
+    chown system system /sys/bus/platform/devices/pm8058-keypad/disable_kp
+
+    # 7630 target supports Warmboot capability
+    setprop ro.warmboot.capability 0
+
+    write /sys/devices/i2c-0/0-0024/cyttsp_update_fw 1
+    exec /system/bin/sh /init.qcom.ril.path.sh
+on property:hw.keyboard.disable=1
+    write  /sys/bus/platform/devices/pm8058-keypad/disable_kp 1
+
+on property:hw.keyboard.disable=0
+    write  /sys/bus/platform/devices/pm8058-keypad/disable_kp 0
+
+on property:sys.radio.shutdown=true
+    write  /sys/devices/platform/rs300000a7.65536/force_sync 1
+    write  /sys/devices/platform/rs300100a7.65536/force_sync 1
+
+on boot
+    chown system system /sys/class/leds/mobilelightinfo/brightness
+    chown system system /sys/class/leds/ledinfo/brightness
+    chown system system /dev/leds-ledlight
+    chmod 0660 /sys/class/leds/mobilelightinfo/brightness
+    chmod 0660 /sys/class/leds/ledinfo/brightness
+    chmod 0660 /dev/leds-ledlight
+
+    insmod  /system/lib/modules/hscd_i2c.ko
+    insmod  /system/lib/modules/ml610q792.ko
+    insmod  /system/lib/modules/alps-input.ko
+    chown system system /dev/alps_io
+    chmod 0660 /dev/alps_io
+    chown system system /dev/alps_io_pedom
+    chmod 0660 /dev/alps_io_pedom
+    chown system system /dev/alps_io_vehicle
+    chmod 0660 /dev/alps_io_vehicle
+    chown system system /sys/devices/i2c-4/4-0039/enable_als_sensor
+    chmod 0660 /sys/devices/i2c-4/4-0039/enable_als_sensor
+    chown system system /sys/devices/i2c-4/4-0039/enable_ps_sensor
+    chmod 0660 /sys/devices/i2c-4/4-0039/enable_ps_sensor
+
+    insmod /system/lib/modules/felica.ko
+
+    symlink /dev/ttyHS1 /dev/felica
+
+    chmod 0660 /dev/felica_cen
+
+    chmod 0660 /dev/felica_pon
+
+    chmod 0660 /dev/changer_dm
+    chown system system /dev/changer_dm
+
+    insmod /system/lib/modules/kc_sdgdrv.ko
+    insmod /system/lib/modules/kc_sdcarddrv.ko
+
+    insmod /system/lib/modules/nvproxy.ko
+
+    chmod 0400 /dev/felica_rfs
+    chown system system /dev/int_poll
+    chmod 0660 /dev/int_poll
+
+    setprop wimax.interface wimax0
+
+    setprop persist.telephony.support_ipv6 false
+
+    setprop net.tcp.buffersize.evdo    4096,87380,110208,4096,24576,110208
+
+    chown system system /sys/devices/platform/dtvtuner_pm.0/power_ctrl
+    chmod 0660 /sys/devices/platform/dtvtuner_pm.0/power_ctrl
+
+    chmod 0660 /dev/irdaeg
+    chmod 0660 /dev/irdaeg1
+    chmod 0660 /dev/irdaeg2
+
+    setprop net.tcp.buffersize.wimax   271360,393216,524288,4096,16384,262144
+
+    setprop persist.telephony.ds.arbit true
+
+    chown system system /dev/apds990x
+    chmod 0660 /dev/apds990x
+
+    write /sys/devices/virtual/bdi/252:0/read_ahead_kb 64
+
+    write /proc/sys/vm/dirty_writeback_centisecs 200
+    write /proc/sys/vm/dirty_expire_centisecs 200
+
+    chown root sdcard_rw /sys/class/android_usb/android0/f_mass_storage/lun/export
+    chown root sdcard_rw /sys/class/android_usb/android0/f_mass_storage/lun/unexport
+    chown root sdcard_rw /sys/class/android_usb/android0/f_mass_storage/lun/opcode-e4/buffer
+    chown root sdcard_rw /sys/class/android_usb/android0/f_mass_storage/lun/opcode-e4/size
+    chown root sdcard_rw /sys/class/android_usb/android0/f_mass_storage/lun/opcode-e4/update
+
+on emmc-fs
+    mkdir /cache/delta 0770 system system
+    mount ext4 /dev/block/mmcblk0p18 /cache/delta nosuid nodev barrier=1 data=journal
+
+    mount ext4 /dev/block/mmcblk0p17 /system/kcjprop/rw nosuid nodev data=journal
+
+on post-fs
+    chown system system /cache/delta
+    chmod 0770 /cache/delta
+    mkdir /cache/delta/fota 0770 system system
+    chown system system /cache/delta/fota
+    chmod 0770 /cache/delta/fota
+
+    setprop ro.3LM.extended 1
+
+    setprop ro.camera.sound.forced 1
+
+    chown root root /system/kcjprop/rw
+    chmod 0771 /system/kcjprop/rw
+
+    mkdir /persist/uim 0770 system system
+
+on post-fs-data
+    # 3LM settings
+    setprop ro.3lm.production 1
+    
+    # 3LM encryption
+    setprop ro.3lm.legacy_encryption 1
+    mkdir /data/secure 0755 system system
+    mkdir /data/secure/data 0755 system system
+    mount tmpfs tmpfs /data/secure/data nosuid mode=0755,gid=1000
+
+on property:ro.factorytest=1
+    setprop debug.sf.nobootanimation 1
+
+on property:init.svc.bootanim=stopped
+    rm /persist/errstart
+
+on property:init.run_class=core,main,late_start
+    class_start main
+    class_start late_start
+
+on property:init.run_class=core,main
+    class_start main
+
+on property:init.run_class=core,late_start
+    class_start late_start
+
+on property:init.svc.dhcpcd_wimax0=stopped
+    setprop dhcp.wimax0.dns1 ""
+    setprop dhcp.wimax0.dns2 ""
+    setprop dhcp.wimax0.dns3 ""
+    setprop dhcp.wimax0.dns4 ""
+    setprop dhcp.wimax0.gateway ""
+    setprop dhcp.wimax0.ipaddress ""
+    setprop dhcp.wimax0.leasetime ""
+    setprop dhcp.wimax0.mask ""
+    setprop dhcp.wimax0.server ""
+
+service kdmd /system/vendor/bin/kdmd
+    class core
+    oneshot
+
+service kflcd /system/bin/kflcd
+    class late_start
+    socket kflcd stream 660 system system
+    oneshot
+
+service dtvtunerserver /system/bin/dtvtunerserver
+    class late_start
+    user system
+    group system
+
+service kwimax_ctrld /system/bin/kwimax_ctrld
+    class late_start
+
+service dhcpcd_wimax0 /system/bin/wimax_dhcpcd -ABKL wimax0
+    class late_start
+    disabled
+    oneshot
+
+service ktouch_nv_daemon /system/bin/ktouch_nv_daemon
+    class core
+    oneshot
+
+service disp_ctrl /system/bin/disp_ctrl
+    class core
+    oneshot
+
+service focld /system/bin/focld
+    class late_start
+    user root
+
+service kcjpropd /system/bin/kcjprop_daemon
+    class core
+    user root
+    group root
+
+service uimd /system/bin/uimd
+    class core
+    socket uimd stream 666 system system
+
+service emailprovd /system/bin/emailprovd
+    class late_start
+    socket aepls001 stream 666 root root
+
+service mediaserver_ex /system/bin/mediaserver_ex
+    class late_start
+    user system
+    group system
+
+service usb_secure /system/vendor/bin/usb_secure_mass
+    class core
+    user root
+    group sdcard_rw
+
+service usb_init /system/vendor/bin/usb_init
+    class core
+    user root
+    group system
+    oneshot
+
+service kerrd /system/vendor/bin/kerrd
+    class core
+
+service kdfs /system/vendor/bin/kdfs
+    class late_start
+    oneshot
+
+service pfmonitor /system/bin/pfmonitor
+    class late_start
+    oneshot
+
+service sdcardioserver /system/bin/sdcardioserver
+    class late_start
+    user root
+    group root
+
+service irdadaemon /system/bin/irdadaemon
+    class late_start
+    socket irdadaemon stream 666
+    oneshot
+
+service nv_kc_chk /system/bin/nv_kc_chk
+    class core
+    oneshot
+
+service akscd /system/vendor/bin/akscd
+    class core
+    user root
+    group root
+
+service wvnvd /system/bin/wvnvd
+    class late_start
+    user root
+    group root
+
