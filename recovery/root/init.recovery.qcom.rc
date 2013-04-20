@@ -3,8 +3,16 @@ on init
 
 on boot
     insmod /system/lib/modules/kc_sdcarddrv.ko
-#    write /sys/kernel/mmc_protect/clear mmcblk0p8
-#    write /sys/kernel/mmc_protect/clear mmcblk0p12
+
+on emmc-fs
+    wait /dev/block/mmcblk0p15
+    mount ext4 /dev/block/mmcblk0p15 /cache nosuid nodev barrier=1 data=journal
+
+on post-fs
+    wait /dev/block/mmcblk0p8
+    write /sys/kernel/mmc_protect/clear mmcblk0p8
+    wait /dev/block/mmcblk0p12
+    write /sys/kernel/mmc_protect/clear mmcblk0p12
 
 service rmt_storage /system/bin/rmt_storage
     user root
