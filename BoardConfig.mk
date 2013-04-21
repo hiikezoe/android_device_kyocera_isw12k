@@ -1,19 +1,10 @@
 USE_CAMERA_STUB := true
+include device/kyocera/msm7630/BoardConfig.mk
 
 # inherit from the proprietary version
 -include vendor/kyocera/isw12k/BoardConfigVendor.mk
 
-TARGET_NO_BOOTLOADER := true
-TARGET_BOARD_PLATFORM := msm7630_surf
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
-TARGET_ARCH := arm
-TARGET_ARCH_VARIANT := armv7-a-neon
-TARGET_ARCH_VARIANT_FPU : = neon
 TARGET_BOOTLOADER_BOARD_NAME := isw12k
-
-BOARD_CUSTOM_RECOVERY_KEYMAPPING := ../../device/kyocera/isw12k/recovery/keys.c
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 
 BOARD_KERNEL_CMDLINE := no_console_suspend=1 console=ttyDCC0 androidboot.hardware=qcom
 BOARD_KERNEL_BASE := 0x00200000
