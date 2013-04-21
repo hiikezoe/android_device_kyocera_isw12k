@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-include kernel/kyocera/isw12k/AndroidKernel.mk
+include kernel/kyocera/msm7630/AndroidKernel.mk
 
 file := $(INSTALLED_KERNEL_TARGET)
 $(file) : $(TARGET_PREBUILT_KERNEL) | $(ACP)

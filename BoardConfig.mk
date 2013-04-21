@@ -20,7 +20,7 @@ BOARD_KERNEL_BASE := 0x00200000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_FORCE_RAMDISK_ADDRESS := 0x1500000
 KERNEL_DEFCONFIG := msm7630-perf_defconfig
-KERNEL_HEADERS += kernel/kyocera/isw12k/include
+KERNEL_HEADERS += kernel/kyocera/msm7360/include
 
 # fix this up by examining /proc/mtd on a running device
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x105c0000
