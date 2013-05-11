@@ -1,3 +1,5 @@
 #
 # system.prop for isw12k
 #
+rild.libargs=-d /dev/smd0
+ro.moz.ril.v5_legacy=false
