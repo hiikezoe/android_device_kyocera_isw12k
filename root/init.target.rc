@@ -131,6 +131,8 @@ on emmc-fs
 
     mount ext4 /dev/block/mmcblk0p17 /system/kcjprop/rw nosuid nodev data=journal
 
+    mkdir /b2g 0775 system system
+
 on post-fs
     chown system system /cache/delta
     chmod 0770 /cache/delta
@@ -156,6 +158,10 @@ on post-fs-data
     mkdir /data/secure 0755 system system
     mkdir /data/secure/data 0755 system system
     mount tmpfs tmpfs /data/secure/data nosuid mode=0755,gid=1000
+
+    mount ext4 loop@/data/b2g-system.img /b2g
+    #mount overlayfs overlayfs /system lowerdir=/system upperdir=/b2g
+    exec /init.mount_overlay.sh
 
 on property:ro.factorytest=1
     setprop debug.sf.nobootanimation 1
