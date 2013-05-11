@@ -90,8 +90,6 @@ on boot
 
     insmod /system/lib/modules/kc_sdcarddrv.ko
 
-    insmod /system/lib/modules/nvproxy.ko
-
     chmod 0400 /dev/felica_rfs
     chown system system /dev/int_poll
     chmod 0660 /dev/int_poll
