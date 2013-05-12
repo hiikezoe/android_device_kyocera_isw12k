@@ -234,11 +234,6 @@ service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0
     group system inet
     disabled
 
-on property:ro.baseband="msm"
-    start port-bridge
-    # Enable BT-DUN only for all msms
-    setprop ro.qualcomm.bluetooth.dun true
-
 service qmiproxy /system/bin/qmiproxy
     class late_start
     user radio
