@@ -1,5 +1,6 @@
 # Init files in initramfs
 PRODUCT_COPY_FILES += \
+  device/kyocera/isw12k/root/init.rc:root/init.rc \
   device/kyocera/isw12k/root/init.target.rc:root/init.target.rc \
   device/kyocera/isw12k/root/init.qcom.rc:root/init.qcom.rc \
   device/kyocera/isw12k/root/init.qcom.usb.rc:root/init.qcom.usb.rc \

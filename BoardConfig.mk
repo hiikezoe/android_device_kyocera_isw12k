@@ -22,6 +22,7 @@ BOARD_NAND_PAGE_SIZE := 4096
 BOARD_NAND_SPARE_SIZE := 128
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
 
+TARGET_PROVIDES_B2G_INIT_RC := true
 #BOARD_HAS_NO_SELECT_BUTTON := true
 # Use this flag if the board has a ext4 partition larger than 2gb
 #BOARD_HAS_LARGE_FILESYSTEM := true
