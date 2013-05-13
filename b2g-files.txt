@@ -67,3 +67,4 @@ lib/modules/kc_sdgdrv.ko
 lib/modules/alps-input.ko
 lib/modules/bcmsdio.ko
 lib/modules/oprofile.ko
+usr/idc/ts_mxt224.idc

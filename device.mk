@@ -9,4 +9,5 @@ PRODUCT_COPY_FILES += \
   device/kyocera/isw12k/root/init.qcom.sh:root/init.qcom.sh \
   device/kyocera/isw12k/root/init.mount_overlay.sh:/root/init.mount_overlay.sh \
   device/kyocera/isw12k/root/initlogo.rle:root/initlogo.rle \
-  device/kyocera/isw12k/root/ueventd.rc:root/ueventd.rc
+  device/kyocera/isw12k/root/ueventd.rc:root/ueventd.rc \
+  device/kyocera/isw12k/system/ts_mxt224.idc:system/usr/idc/ts_mxt224.idc
