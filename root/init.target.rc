@@ -88,9 +88,6 @@ on boot
     chmod 0660 /dev/changer_dm
     chown system system /dev/changer_dm
 
-    insmod /system/lib/modules/kc_sdgdrv.ko
-    insmod /system/lib/modules/kc_sdcarddrv.ko
-
     chmod 0400 /dev/felica_rfs
     chown system system /dev/int_poll
     chmod 0660 /dev/int_poll
@@ -132,6 +129,10 @@ on emmc-fs
 
     mount ext4 /dev/block/mmcblk0p17 /system/kcjprop/rw nosuid nodev data=journal
 
+    insmod /system/lib/modules/kc_sdcarddrv.ko
+    wait /dev/block/kc_sdcarddrv1
+    mount vfat /dev/block/kc_sdcarddrv1 /mnt/sdcard
+
     mkdir /b2g 0775 system system
     mkdir /b2g-data 0775 system system
 
@@ -151,6 +152,10 @@ on post-fs
 
     mkdir /persist/uim 0770 system system
 
+    mount ext4 loop@/sdcard/b2g/b2g-system.img /b2g
+    mount ext4 loop@/sdcard/b2g/userdata.img /data
+    exec /init.mount_overlay.sh
+
 on post-fs-data
     # 3LM settings
     setprop ro.3lm.production 1
@@ -160,11 +165,6 @@ on post-fs-data
     mkdir /data/secure 0755 system system
     mkdir /data/secure/data 0755 system system
     mount tmpfs tmpfs /data/secure/data nosuid mode=0755,gid=1000
-
-    mount ext4 loop@/data/b2g-system.img /b2g
-    mount ext4 loop@/data/b2g-userdata.img /b2g-data
-    #mount overlayfs overlayfs /system lowerdir=/system upperdir=/b2g
-    exec /init.mount_overlay.sh
 
 on property:ro.factorytest=1
     setprop debug.sf.nobootanimation 1
