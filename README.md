@@ -4,7 +4,7 @@
 
 ### Recovery Mode
 
-    Menu + Volume up + Volume down + Power on
+    Power on, then Volume up + Home
 
 ## Partition
 
